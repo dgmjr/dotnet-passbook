@@ -2,24 +2,12 @@
 
 namespace Passbook.Generator
 {
-    public class Pass
+    public class Pass(string packagePathAndName)
     {
-        private string packagePathAndName;
+        private readonly string _packagePathAndName = packagePathAndName;
 
-        public Pass(string packagePathAndName)
-        {
-            this.packagePathAndName = packagePathAndName;
-        }
+        public byte[] GetPackage() => File.ReadAllBytes(_packagePathAndName);
 
-        public byte[] GetPackage()
-        {
-            byte[] contents = File.ReadAllBytes(packagePathAndName);
-            return contents;
-        }
-
-        public string PackageDirectory
-        {
-            get { return Path.GetDirectoryName(this.packagePathAndName); }
-        }
+        public string PackageDirectory => Path.GetDirectoryName(_packagePathAndName);
     }
 }

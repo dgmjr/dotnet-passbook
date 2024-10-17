@@ -1,8 +1,9 @@
 ﻿namespace Passbook.Generator.Tags
 {
-    class DepartureAirportCode : SemanticTagBaseValue
+    public class DepartureAirportCode : SemanticTagBaseValue
     {
-        public DepartureAirportCode(string value) : base("departureAirportCode", value)
+        public DepartureAirportCode(string value)
+            : base("departureAirportCode", value)
         {
             // NO OP
         }
