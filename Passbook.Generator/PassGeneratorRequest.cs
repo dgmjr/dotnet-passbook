@@ -24,7 +24,9 @@ namespace Passbook.Generator
             RelevantLocations = new List<RelevantLocation>();
             RelevantBeacons = new List<RelevantBeacon>();
             AssociatedStoreIdentifiers = new List<long>();
-            Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+            Localizations = new Dictionary<string, Dictionary<string, string>>(
+                StringComparer.OrdinalIgnoreCase
+            );
             Barcodes = new List<Barcode>();
             UserInfo = new Dictionary<string, object>();
         }
@@ -39,7 +41,10 @@ namespace Passbook.Generator
         /// <summary>
         /// Required. Version of the file format. The value must be 1.
         /// </summary>
-        public int FormatVersion { get { return 1; } }
+        public int FormatVersion
+        {
+            get { return 1; }
+        }
 
         /// <summary>
         /// Required. Serial number that uniquely identifies the pass. No two passes with the same pass type identifier may have the same serial number.
@@ -213,6 +218,7 @@ namespace Passbook.Generator
         /// The authentication token to use with the web service.
         /// </summary>
         public string AuthenticationToken { get; set; }
+
         /// <summary>
         /// The URL of a web service that conforms to the API described in Pass Kit Web Service Reference.
         /// The web service must use the HTTPS protocol and includes the leading https://.
@@ -284,19 +290,26 @@ namespace Passbook.Generator
             BackFields.Add(field);
         }
 
-        private void EnsureFieldKeyIsUnique(string key)
+        private void EnsureFieldKeyIsUnique(string? key)
         {
-            if (HeaderFields.Any(x => x.Key == key) ||
-                PrimaryFields.Any(x => x.Key == key) ||
-                SecondaryFields.Any(x => x.Key == key) ||
-                AuxiliaryFields.Any(x => x.Key == key) ||
-                BackFields.Any(x => x.Key == key))
+            if (
+                HeaderFields.Any(x => x.Key == key)
+                || PrimaryFields.Any(x => x.Key == key)
+                || SecondaryFields.Any(x => x.Key == key)
+                || AuxiliaryFields.Any(x => x.Key == key)
+                || BackFields.Any(x => x.Key == key)
+            )
             {
-                throw new DuplicateFieldKeyException(key);
+                throw new DuplicateFieldKeyException(key!);
             }
         }
 
-        public void AddBarcode(BarcodeType type, string message, string encoding, string alternateText)
+        public void AddBarcode(
+            BarcodeType type,
+            string message,
+            string encoding,
+            string alternateText
+        )
         {
             Barcodes.Add(new Barcode(type, message, encoding, alternateText));
         }
@@ -306,34 +319,63 @@ namespace Passbook.Generator
             Barcodes.Add(new Barcode(type, message, encoding));
         }
 
-        public void SetBarcode(BarcodeType type, string message, string encoding, string alternateText = null)
+        public void SetBarcode(
+            BarcodeType type,
+            string message,
+            string encoding,
+            string? alternateText = default
+        )
         {
             Barcode = new Barcode(type, message, encoding, alternateText);
         }
 
         public void AddLocation(double latitude, double longitude)
         {
-            AddLocation(latitude, longitude, null);
+            AddLocation(latitude, longitude, default);
         }
 
-        public void AddLocation(double latitude, double longitude, string relevantText)
+        public void AddLocation(double latitude, double longitude, string? relevantText)
         {
-            RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
+            RelevantLocations.Add(
+                new RelevantLocation()
+                {
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    RelevantText = relevantText
+                }
+            );
         }
 
         public void AddBeacon(string proximityUUID, string relevantText)
         {
-            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText });
+            RelevantBeacons.Add(
+                new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText }
+            );
         }
 
         public void AddBeacon(string proximityUUID, string relevantText, int major)
         {
-            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major });
+            RelevantBeacons.Add(
+                new RelevantBeacon()
+                {
+                    ProximityUUID = proximityUUID,
+                    RelevantText = relevantText,
+                    Major = major
+                }
+            );
         }
 
         public void AddBeacon(string proximityUUID, string relevantText, int major, int minor)
         {
-            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
+            RelevantBeacons.Add(
+                new RelevantBeacon()
+                {
+                    ProximityUUID = proximityUUID,
+                    RelevantText = relevantText,
+                    Major = major,
+                    Minor = minor
+                }
+            );
         }
 
         public void AddLocalization(string languageCode, string key, string value)
@@ -647,7 +689,9 @@ namespace Passbook.Generator
         {
             if (!string.IsNullOrEmpty(color) && color.Substring(0, 1) == "#")
             {
-                int r, g, b;
+                int r,
+                    g,
+                    b;
 
                 if (color.Length == 3)
                 {

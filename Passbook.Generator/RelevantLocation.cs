@@ -23,7 +23,7 @@ namespace Passbook.Generator
         /// <summary>
         /// Optional. Text displayed on the lock screen when the pass is currently relevant.
         /// </summary>
-        public string RelevantText { get; set; }
+        public string? RelevantText { get; set; }
 
         public void Write(JsonWriter writer)
         {

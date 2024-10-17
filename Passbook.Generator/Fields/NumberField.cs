@@ -1,22 +1,19 @@
 ﻿namespace Passbook.Generator.Fields
 {
-    public class NumberField : Field
+    public class NumberField(
+        string? key,
+        string? label,
+        decimal value = 0m,
+        FieldNumberStyle numberStyle = default
+    ) : Field<decimal>(key, label)
     {
+        public sealed override FieldType FieldType => FieldType.Number;
+
         public NumberField()
-            : base()
-        { }
+            : this(default, default, default, default) { }
 
-        public NumberField(string key, string label, decimal value, FieldNumberStyle numberStyle)
-            : base(key, label)
-        {
-            this.Value = value;
-            this.NumberStyle = numberStyle;
-        }
-
-        public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
-            : this(key, label, (decimal)value, numberStyle)
-        {
-        }
+        public NumberField(string? key, string? label, int value, FieldNumberStyle numberStyle)
+            : this(key, label, (decimal)value, numberStyle) { }
 
         /// <summary>
         /// ISO 4217 currency code for the field’s value.
@@ -26,9 +23,9 @@
         /// <summary>
         /// Style of number to display. Must be one of <see cref="FieldNumberStyle" />
         /// </summary>
-        public FieldNumberStyle NumberStyle { get; set; }
+        public FieldNumberStyle NumberStyle { get; set; } = numberStyle;
 
-        public decimal Value { get; set; }
+        public override decimal Value { get; set; } = value;
 
         protected override void WriteKeys(Newtonsoft.Json.JsonWriter writer)
         {
@@ -52,12 +49,9 @@
 
         public override void SetValue(object value)
         {
-            this.Value = (decimal)value;
+            Value = (decimal)value;
         }
 
-        public override bool HasValue
-        {
-            get { return true; }
-        }
+        public override bool HasValue => true;
     }
 }
