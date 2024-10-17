@@ -4,22 +4,15 @@ namespace Passbook.Generator
 {
     public class Pass
     {
-        private string packagePathAndName;
+        private readonly string _packagePathAndName;
 
         public Pass(string packagePathAndName)
         {
-            this.packagePathAndName = packagePathAndName;
+            this._packagePathAndName = packagePathAndName;
         }
 
-        public byte[] GetPackage()
-        {
-            byte[] contents = File.ReadAllBytes(packagePathAndName);
-            return contents;
-        }
+        public byte[] GetPackage() => File.ReadAllBytes(_packagePathAndName);
 
-        public string PackageDirectory
-        {
-            get { return Path.GetDirectoryName(this.packagePathAndName); }
-        }
+        public string PackageDirectory => Path.GetDirectoryName(_packagePathAndName);
     }
 }
