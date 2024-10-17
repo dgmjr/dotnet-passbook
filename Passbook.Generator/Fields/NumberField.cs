@@ -3,20 +3,17 @@
     public class NumberField : Field
     {
         public NumberField()
-            : base()
-        { }
+            : base() { }
 
         public NumberField(string key, string label, decimal value, FieldNumberStyle numberStyle)
             : base(key, label)
         {
-            this.Value = value;
-            this.NumberStyle = numberStyle;
+            Value = value;
+            NumberStyle = numberStyle;
         }
 
         public NumberField(string key, string label, int value, FieldNumberStyle numberStyle)
-            : this(key, label, (decimal)value, numberStyle)
-        {
-        }
+            : this(key, label, (decimal)value, numberStyle) { }
 
         /// <summary>
         /// ISO 4217 currency code for the field’s value.
@@ -52,12 +49,9 @@
 
         public override void SetValue(object value)
         {
-            this.Value = (decimal)value;
+            Value = (decimal)value;
         }
 
-        public override bool HasValue
-        {
-            get { return true; }
-        }
+        public override bool HasValue => true;
     }
 }

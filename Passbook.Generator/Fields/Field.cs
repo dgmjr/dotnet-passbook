@@ -6,33 +6,40 @@ namespace Passbook.Generator.Fields
 {
     public abstract class Field
     {
-        public Field()
+        protected Field()
         {
-            this.DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
+            DataDetectorTypes = DataDetectorTypes.PKDataDetectorAll;
         }
 
-        public Field(string key, string label)
+        protected Field(string key, string label)
             : this()
         {
-            this.Key = key;
-            this.Label = label;
+            Key = key;
+            Label = label;
         }
 
-        public Field(string key, string label, string changeMessage, FieldTextAlignment textAligment)
+        protected Field(
+            string key,
+            string label,
+            string changeMessage,
+            FieldTextAlignment textAligment
+        )
             : this(key, label)
         {
-            this.ChangeMessage = changeMessage;
-            this.TextAlignment = textAligment;
+            ChangeMessage = changeMessage;
+            TextAlignment = textAligment;
         }
 
         /// <summary>
         /// Required. The key must be unique within the scope of the entire pass. For example, “departure-gate”.
         /// </summary>
         public string Key { get; set; }
+
         /// <summary>
         /// Optional. Label text for the field.
         /// </summary>
         public string Label { get; set; }
+
         /// <summary>
         /// <para>Optional. Format string for the alert text that is displayed when the pass is updated.</para>
         /// <para>The format string must contain the escape %@, which is replaced with the field's new value.</para>
@@ -40,6 +47,7 @@ namespace Passbook.Generator.Fields
         /// <para>If you don't specify a change message, the user isn't notified when the field changes.</para>
         /// </summary>
         public string ChangeMessage { get; set; }
+
         /// <summary>
         /// <para>Optional. Alignment for the field’s contents. Must be one of the following values:</para>
         ///	<list type="bullet">
@@ -60,6 +68,7 @@ namespace Passbook.Generator.Fields
         /// <para>This key is not allowed for primary fields or back fields.</para>
         /// </summary>
         public FieldTextAlignment TextAlignment { get; set; }
+
         /// <summary>
         /// <para>Optional. Attributed value of the field.</para>
         /// <para>The value may contain HTML markup for links. Only the &lt;a&gt; tag and its href attribute are supported. For example, the following is key/value pair specifies a link with the text "Edit my profile":</para>
@@ -125,13 +134,13 @@ namespace Passbook.Generator.Fields
             if (!string.IsNullOrEmpty(AttributedValue))
             {
                 writer.WritePropertyName("attributedValue");
-                writer.WriteValue(this.AttributedValue);
+                writer.WriteValue(AttributedValue);
             }
 
             if (Row.HasValue)
             {
                 writer.WritePropertyName("row");
-                writer.WriteValue(this.Row.Value);
+                writer.WriteValue(Row.Value);
             }
 
             WriteKeys(writer);
@@ -152,10 +161,14 @@ namespace Passbook.Generator.Fields
                 writer.WriteStartArray();
 
                 foreach (Enum value in Enum.GetValues(typeof(DataDetectorTypes)))
-                    if (value.CompareTo(DataDetectorTypes.PKDataDetectorNone) != 0 &&
-                        value.CompareTo(DataDetectorTypes.PKDataDetectorAll) != 0 &&
-                        DataDetectorTypes.HasFlag(value))
+                {
+                    if (
+                        value.CompareTo(DataDetectorTypes.PKDataDetectorNone) != 0
+                        && value.CompareTo(DataDetectorTypes.PKDataDetectorAll) != 0
+                        && DataDetectorTypes.HasFlag(value)
+                    )
                         writer.WriteValue(value.ToString());
+                }
 
                 writer.WriteEndArray();
             }
