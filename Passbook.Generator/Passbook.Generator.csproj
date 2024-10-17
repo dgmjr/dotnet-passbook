@@ -2,23 +2,20 @@
 
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0</TargetFrameworks>
-    <Version>3.2.4.0</Version>
-    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PackageId>dotnet-passbook</PackageId>
-    <Company>Tomas McGuinness</Company>
+    <Company>Tomas McGuinness &amp; DGMJR-IO</Company>
     <Product>dotnet-passbook</Product>
     <Description>Generate pass files for Apple Wallet. This library allows you to build and sign a pkpass file.</Description>
     <PackageReleaseNotes>Fix issue where some Associated Store Identifier values where not being handled correctly (GitHub issue #179)</PackageReleaseNotes>
     <PackageTags>PassBook Wallet Apple Passkit</PackageTags>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-    <PackageLicenseExpression></PackageLicenseExpression>
-    <RepositoryUrl>https://github.com/tomasmcguinness/dotnet-passbook</RepositoryUrl>
-    <Copyright>2022 Tomas McGuinness</Copyright>
-    <PackageLicenseFile>license.txt</PackageLicenseFile>
-    <AssemblyVersion>3.0.1</AssemblyVersion>
-    <FileVersion>3.0.1</FileVersion>
+    <Copyright>© 2022-2024 Tomas McGuinness &amp; David G. Moore, Jr. &lt;david@dgmjr.io&gt;</Copyright>
+    <PackageLicense>MIT</PackageLicense>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <Authors>Tomas McGuinness</Authors>
+    <Authors>Tomas McGuinness; David G. Moore Jr. &lt;david@dgmjr.io&gt;</Authors>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <PackageIcon>icon.png</PackageIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -27,15 +24,17 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
- <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
-    <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Security" />
+  <ItemGroup>
+    <PackageReference Include="MinVer">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="4.7.0" />
+  <ItemGroup>
+    <None Include="../images/icon2.png" Pack="true" PackagePath="icon.png" />
   </ItemGroup>
-
 </Project>

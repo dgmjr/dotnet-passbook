@@ -19,19 +19,21 @@ namespace Passbook.Generator.Tests
             request.ExpirationDate = new DateTime(2018, 1, 1, 0, 0, 0, DateTimeKind.Local);
             request.Nfc = new Nfc("My NFC Message", "SKLSJLKJ");
 
-            DateTime offset = new DateTime(2018, 01, 05, 12, 00, 0);
-            TimeZoneInfo zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
-            DateTimeOffset offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
+            var offset = new DateTime(2018, 01, 05, 12, 00, 0);
+            var zone = TZConvert.GetTimeZoneInfo("Eastern Standard Time");
+            var offsetConverted = new DateTimeOffset(offset, zone.GetUtcOffset(offset));
 
             request.RelevantDate = offsetConverted;
 
-            request.AddAuxiliaryField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-                Row = 1
-            });
+            request.AddAuxiliaryField(
+                new StandardField()
+                {
+                    Key = "aux-1",
+                    Value = "Test",
+                    Label = "Label",
+                    Row = 1
+                }
+            );
 
             request.AssociatedStoreIdentifiers.Add(long.MaxValue);
 
@@ -47,7 +49,10 @@ namespace Passbook.Generator.Tests
 
                     string jsonString = Encoding.UTF8.GetString(ms.ToArray());
 
-                    var settings = new JsonSerializerSettings { DateParseHandling = DateParseHandling.None };
+                    var settings = new JsonSerializerSettings
+                    {
+                        DateParseHandling = DateParseHandling.None
+                    };
 
                     dynamic json = JsonConvert.DeserializeObject(jsonString, settings);
 
@@ -68,7 +73,8 @@ namespace Passbook.Generator.Tests
                     Assert.Equal("Label", (string)auxField["label"]);
                     Assert.Equal(1, (int)auxField["row"]);
 
-                    var associatedAppIdentifiersPayload = (JArray)json["associatedStoreIdentifiers"];
+                    var associatedAppIdentifiersPayload = (JArray)
+                        json["associatedStoreIdentifiers"];
                     Assert.Single(associatedAppIdentifiersPayload);
                     Assert.Equal(long.MaxValue, associatedAppIdentifiersPayload[0]);
                 }
@@ -80,19 +86,26 @@ namespace Passbook.Generator.Tests
         {
             PassGeneratorRequest request = new PassGeneratorRequest();
 
-            request.AddAuxiliaryField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-            });
+            request.AddAuxiliaryField(
+                new StandardField()
+                {
+                    Key = "aux-1",
+                    Value = "Test",
+                    Label = "Label",
+                }
+            );
 
-            Assert.Throws<DuplicateFieldKeyException>(() => request.AddHeaderField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-            }));
+            Assert.Throws<DuplicateFieldKeyException>(
+                () =>
+                    request.AddHeaderField(
+                        new StandardField()
+                        {
+                            Key = "aux-1",
+                            Value = "Test",
+                            Label = "Label",
+                        }
+                    )
+            );
         }
 
         [Fact]
@@ -108,31 +121,53 @@ namespace Passbook.Generator.Tests
 
             request.RelevantDate = offsetConverted;
 
-            request.AddAuxiliaryField(new StandardField()
-            {
-                Key = "aux-1",
-                Value = "Test",
-                Label = "Label",
-                Row = 1
-            });
+            request.AddAuxiliaryField(
+                new StandardField()
+                {
+                    Key = "aux-1",
+                    Value = "Test",
+                    Label = "Label",
+                    Row = 1
+                }
+            );
 
             var local = DateTime.Now;
-            local = new DateTime(local.Year, local.Month, local.Day, local.Hour, local.Minute, local.Second, local.Kind);
-            request.AddAuxiliaryField(new DateField()
-            {
-                Key = "datetime-1",
-                Value = local,
-                Label = "Label",
-            });
+            local = new DateTime(
+                local.Year,
+                local.Month,
+                local.Day,
+                local.Hour,
+                local.Minute,
+                local.Second,
+                local.Kind
+            );
+            request.AddAuxiliaryField(
+                new DateField()
+                {
+                    Key = "datetime-1",
+                    Value = local,
+                    Label = "Label",
+                }
+            );
 
             var utc = DateTime.UtcNow;
-            utc = new DateTime(utc.Year, utc.Month, utc.Day, utc.Hour, utc.Minute, utc.Second, utc.Kind);
-            request.AddAuxiliaryField(new DateField()
-            {
-                Key = "datetime-2",
-                Value = utc,
-                Label = "Label",
-            });
+            utc = new DateTime(
+                utc.Year,
+                utc.Month,
+                utc.Day,
+                utc.Hour,
+                utc.Minute,
+                utc.Second,
+                utc.Kind
+            );
+            request.AddAuxiliaryField(
+                new DateField()
+                {
+                    Key = "datetime-2",
+                    Value = utc,
+                    Label = "Label",
+                }
+            );
 
             using (MemoryStream ms = new MemoryStream())
             {
@@ -146,7 +181,10 @@ namespace Passbook.Generator.Tests
 
                     string jsonString = Encoding.UTF8.GetString(ms.ToArray());
                     Console.WriteLine(jsonString);
-                    var settings = new JsonSerializerSettings { DateParseHandling = DateParseHandling.None };
+                    var settings = new JsonSerializerSettings
+                    {
+                        DateParseHandling = DateParseHandling.None
+                    };
 
                     dynamic json = JsonConvert.DeserializeObject(jsonString, settings);
 

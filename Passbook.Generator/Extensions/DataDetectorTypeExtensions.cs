@@ -4,7 +4,7 @@ namespace Passbook.Generator
 {
     public static class DataDetectorTypeExtensions
     {
-        // Dotfucated friendly enum name conversion
+        // Dotfsucated friendly enum name conversion
         // http://stackoverflow.com/questions/483794/convert-enum-to-string
         public static string ToSafeString(this DataDetectorTypes dataDetectorType)
         {

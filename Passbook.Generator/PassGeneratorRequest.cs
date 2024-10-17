@@ -24,7 +24,9 @@ namespace Passbook.Generator
             RelevantLocations = new List<RelevantLocation>();
             RelevantBeacons = new List<RelevantBeacon>();
             AssociatedStoreIdentifiers = new List<long>();
-            Localizations = new Dictionary<string, Dictionary<string, string>>(StringComparer.OrdinalIgnoreCase);
+            Localizations = new Dictionary<string, Dictionary<string, string>>(
+                StringComparer.OrdinalIgnoreCase
+            );
             Barcodes = new List<Barcode>();
             UserInfo = new Dictionary<string, object>();
         }
@@ -39,32 +41,35 @@ namespace Passbook.Generator
         /// <summary>
         /// Required. Version of the file format. The value must be 1.
         /// </summary>
-        public int FormatVersion { get { return 1; } }
+        public int FormatVersion
+        {
+            get { return 1; }
+        }
 
         /// <summary>
         /// Required. Serial number that uniquely identifies the pass. No two passes with the same pass type identifier may have the same serial number.
         /// </summary>
-        public string SerialNumber { get; set; }
+        public virtual string SerialNumber { get; set; }
 
         /// <summary>
         /// Required. A simple description of the pass
         /// </summary>
-        public string Description { get; set; }
+        public virtual string Description { get; set; }
 
         /// <summary>
         /// Required. Team identifier of the organization that originated and signed the pass, as issued by Apple.
         /// </summary>
-        public string TeamIdentifier { get; set; }
+        public virtual string TeamIdentifier { get; set; }
 
         /// <summary>
         /// Required. Display name of the organization that originated and signed the pass.
         /// </summary>
-        public string OrganizationName { get; set; }
+        public virtual string OrganizationName { get; set; }
 
         /// <summary>
         /// Disables sharing of the pass.
         /// </summary>
-        public bool SharingProhibited { get; set; }
+        public virtual bool SharingProhibited { get; set; }
 
         #endregion
 
@@ -73,7 +78,7 @@ namespace Passbook.Generator
         /// <summary>
         /// When using in memory, the binary of each image is put here.
         /// </summary>
-        public Dictionary<PassbookImage, byte[]> Images { get; set; }
+        public virtual Dictionary<PassbookImage, byte[]> Images { get; set; }
 
         #endregion
 
@@ -83,9 +88,9 @@ namespace Passbook.Generator
 
         #region Expiration Keys
 
-        public DateTimeOffset? ExpirationDate { get; set; }
+        public virtual DateTimeOffset? ExpirationDate { get; set; }
 
-        public Boolean? Voided { get; set; }
+        public virtual Boolean? Voided { get; set; }
 
         #endregion
 
@@ -94,78 +99,78 @@ namespace Passbook.Generator
         /// <summary>
         /// Optional. Foreground color of the pass, specified as a CSS-style RGB triple. For example, rgb(100, 10, 110).
         /// </summary>
-        public string ForegroundColor { get; set; }
+        public virtual string ForegroundColor { get; set; }
 
         /// <summary>
         /// Optional. Background color of the pass, specified as an CSS-style RGB triple. For example, rgb(23, 187, 82).
         /// </summary>
-        public string BackgroundColor { get; set; }
+        public virtual string BackgroundColor { get; set; }
 
         /// <summary>
         /// Optional. Color of the label text, specified as a CSS-style RGB triple. For example, rgb(255, 255, 255).
         /// If omitted, the label color is determined automatically.
         /// </summary>
-        public string LabelColor { get; set; }
+        public virtual string LabelColor { get; set; }
 
         /// <summary>
         /// Optional. Text displayed next to the logo on the pass.
         /// </summary>
-        public string LogoText { get; set; }
+        public virtual string LogoText { get; set; }
 
         /// <summary>
         /// Optional. If true, the strip image is displayed without a shine effect. The default value is false.
         /// </summary>
-        public bool? SuppressStripShine { get; set; }
+        public virtual bool? SuppressStripShine { get; set; }
 
         /// <summary>
         /// Optional. The semantic tags to add to the pass. Read more about them here https://developer.apple.com/documentation/walletpasses/semantictags
         /// </summary>
-        public SemanticTags SemanticTags { get; }
+        public virtual SemanticTags SemanticTags { get; }
 
         /// <summary>
         /// Optional. Fields to be displayed prominently on the front of the pass.
         /// </summary>
-        public List<Field> HeaderFields { get; private set; }
+        public virtual List<Field> HeaderFields { get; private set; }
 
         /// <summary>
         /// Optional. Fields to be displayed prominently on the front of the pass.
         /// </summary>
-        public List<Field> PrimaryFields { get; private set; }
+        public virtual List<Field> PrimaryFields { get; private set; }
 
         /// <summary>
         /// Optional. Fields to be displayed on the front of the pass.
         /// </summary>
-        public List<Field> SecondaryFields { get; private set; }
+        public virtual List<Field> SecondaryFields { get; private set; }
 
         /// <summary>
         /// Optional. Additional fields to be displayed on the front of the pass.
         /// </summary>
-        public List<Field> AuxiliaryFields { get; private set; }
+        public virtual List<Field> AuxiliaryFields { get; private set; }
 
         /// <summary>
         /// Optional. Information about fields that are displayed on the back of the pass.
         /// </summary>
-        public List<Field> BackFields { get; private set; }
+        public virtual List<Field> BackFields { get; private set; }
 
         /// <summary>
         /// Optional. Information specific to barcodes.
         /// </summary>
-        public Barcode Barcode { get; private set; }
+        public virtual Barcode Barcode { get; private set; }
 
         /// <summary>
         /// Required. Pass type.
         /// </summary>
-        public PassStyle Style { get; set; }
+        public virtual PassStyle Style { get; set; }
 
         /// <summary>
         /// Required for boarding passes; otherwise not allowed. Type of transit.
         /// </summary>
-        public TransitType TransitType { get; set; }
+        public virtual TransitType TransitType { get; set; }
 
         /// <summary>
         /// Optional for event tickets and boarding passes; otherwise not allowed. Identifier used to group related passes
         /// </summary>
-        public string GroupingIdentifier { get; set; }
+        public virtual string GroupingIdentifier { get; set; }
 
         #endregion
 
@@ -174,22 +179,22 @@ namespace Passbook.Generator
         /// <summary>
         /// Optional. Date and time when the pass becomes relevant. For example, the start time of a movie.
         /// </summary>
-        public DateTimeOffset? RelevantDate { get; set; }
+        public virtual DateTimeOffset? RelevantDate { get; set; }
 
         /// <summary>
         /// Optional. Locations where the passisrelevant. For example, the location of your store.
         /// </summary>
-        public List<RelevantLocation> RelevantLocations { get; private set; }
+        public virtual List<RelevantLocation> RelevantLocations { get; private set; }
 
         /// <summary>
         /// Optional. Beacons marking locations where the pass is relevant.
         /// </summary>
-        public List<RelevantBeacon> RelevantBeacons { get; private set; }
+        public virtual List<RelevantBeacon> RelevantBeacons { get; private set; }
 
         /// <summary>
         /// Optional. Maximum distance in meters from a relevant latitude and longitude that the pass is relevant
         /// </summary>
-        public int? MaxDistance { get; set; }
+        public virtual int? MaxDistance { get; set; }
 
         #endregion
 
@@ -198,12 +203,12 @@ namespace Passbook.Generator
         /// <summary>
         /// A byte array containing the PassKit certificate
         /// </summary>
-        public X509Certificate2 PassbookCertificate { get; set; }
+        public virtual X509Certificate2 PassbookCertificate { get; set; }
 
         /// <summary>
         /// A byte array containing the Apple WWDRCA X509 certificate
         /// </summary>
-        public X509Certificate2 AppleWWDRCACertificate { get; set; }
+        public virtual X509Certificate2 AppleWWDRCACertificate { get; set; }
 
         #endregion
 
@@ -212,131 +217,173 @@ namespace Passbook.Generator
         /// <summary>
         /// The authentication token to use with the web service.
         /// </summary>
-        public string AuthenticationToken { get; set; }
+        public virtual string AuthenticationToken { get; set; }
+
         /// <summary>
         /// The URL of a web service that conforms to the API described in Pass Kit Web Service Reference.
         /// The web service must use the HTTPS protocol and includes the leading https://.
         /// On devices configured for development, there is UI in Settings to allow HTTP web services.
         /// </summary>
-        public string WebServiceUrl { get; set; }
+        public virtual string WebServiceUrl { get; set; }
 
         #endregion
 
         #region Associated App Keys
 
-        public List<long> AssociatedStoreIdentifiers { get; set; }
+        public virtual List<long> AssociatedStoreIdentifiers { get; set; }
 
-        public string AppLaunchURL { get; set; }
+        public virtual string AppLaunchURL { get; set; }
 
         #endregion
 
         #region Barcodes
 
-        public List<Barcode> Barcodes { get; private set; }
+        public virtual List<Barcode> Barcodes { get; private set; }
 
         #endregion
 
         #region User Info Keys
 
-        public IDictionary<string, object> UserInfo { get; set; }
+        public virtual IDictionary<string, object> UserInfo { get; set; }
 
         #endregion
 
         #region Localization
-        public Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
+        public virtual Dictionary<string, Dictionary<string, string>> Localizations { get; set; }
         #endregion
 
         #region NFC
 
-        public Nfc Nfc { get; set; }
+        public virtual Nfc Nfc { get; set; }
 
         #endregion
 
         #region Helpers and Serialization
 
-        public void AddHeaderField(Field field)
+        public virtual void AddHeaderField(Field field)
         {
             EnsureFieldKeyIsUnique(field.Key);
             HeaderFields.Add(field);
         }
 
-        public void AddPrimaryField(Field field)
+        public virtual void AddPrimaryField(Field field)
         {
             EnsureFieldKeyIsUnique(field.Key);
             PrimaryFields.Add(field);
         }
 
-        public void AddSecondaryField(Field field)
+        public virtual void AddSecondaryField(Field field)
         {
             EnsureFieldKeyIsUnique(field.Key);
             SecondaryFields.Add(field);
         }
 
-        public void AddAuxiliaryField(Field field)
+        public virtual void AddAuxiliaryField(Field field)
         {
             EnsureFieldKeyIsUnique(field.Key);
             AuxiliaryFields.Add(field);
         }
 
-        public void AddBackField(Field field)
+        public virtual void AddBackField(Field field)
         {
             EnsureFieldKeyIsUnique(field.Key);
             BackFields.Add(field);
         }
 
-        private void EnsureFieldKeyIsUnique(string key)
+        private void EnsureFieldKeyIsUnique(string? key)
         {
-            if (HeaderFields.Any(x => x.Key == key) ||
-                PrimaryFields.Any(x => x.Key == key) ||
-                SecondaryFields.Any(x => x.Key == key) ||
-                AuxiliaryFields.Any(x => x.Key == key) ||
-                BackFields.Any(x => x.Key == key))
+            if (
+                HeaderFields.Any(x => x.Key == key)
+                || PrimaryFields.Any(x => x.Key == key)
+                || SecondaryFields.Any(x => x.Key == key)
+                || AuxiliaryFields.Any(x => x.Key == key)
+                || BackFields.Any(x => x.Key == key)
+            )
             {
-                throw new DuplicateFieldKeyException(key);
+                throw new DuplicateFieldKeyException(key!);
             }
         }
 
-        public void AddBarcode(BarcodeType type, string message, string encoding, string alternateText)
+        public virtual void AddBarcode(
+            BarcodeType type,
+            string message,
+            string encoding,
+            string alternateText
+        )
         {
             Barcodes.Add(new Barcode(type, message, encoding, alternateText));
         }
 
-        public void AddBarcode(BarcodeType type, string message, string encoding)
+        public virtual void AddBarcode(BarcodeType type, string message, string encoding)
         {
             Barcodes.Add(new Barcode(type, message, encoding));
         }
 
-        public void SetBarcode(BarcodeType type, string message, string encoding, string alternateText = null)
+        public virtual void SetBarcode(
+            BarcodeType type,
+            string message,
+            string encoding,
+            string? alternateText = default
+        )
         {
             Barcode = new Barcode(type, message, encoding, alternateText);
         }
 
-        public void AddLocation(double latitude, double longitude)
+        public virtual void AddLocation(double latitude, double longitude)
         {
-            AddLocation(latitude, longitude, null);
+            AddLocation(latitude, longitude, default);
         }
 
-        public void AddLocation(double latitude, double longitude, string relevantText)
+        public virtual void AddLocation(double latitude, double longitude, string? relevantText)
         {
-            RelevantLocations.Add(new RelevantLocation() { Latitude = latitude, Longitude = longitude, RelevantText = relevantText });
+            RelevantLocations.Add(
+                new RelevantLocation()
+                {
+                    Latitude = latitude,
+                    Longitude = longitude,
+                    RelevantText = relevantText
+                }
+            );
         }
 
-        public void AddBeacon(string proximityUUID, string relevantText)
+        public virtual void AddBeacon(string proximityUUID, string relevantText)
         {
-            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText });
+            RelevantBeacons.Add(
+                new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText }
+            );
         }
 
-        public void AddBeacon(string proximityUUID, string relevantText, int major)
+        public virtual void AddBeacon(string proximityUUID, string relevantText, int major)
         {
-            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major });
+            RelevantBeacons.Add(
+                new RelevantBeacon()
+                {
+                    ProximityUUID = proximityUUID,
+                    RelevantText = relevantText,
+                    Major = major
+                }
+            );
         }
 
-        public void AddBeacon(string proximityUUID, string relevantText, int major, int minor)
+        public virtual void AddBeacon(
+            string proximityUUID,
+            string relevantText,
+            int major,
+            int minor
+        )
         {
-            RelevantBeacons.Add(new RelevantBeacon() { ProximityUUID = proximityUUID, RelevantText = relevantText, Major = major, Minor = minor });
+            RelevantBeacons.Add(
+                new RelevantBeacon()
+                {
+                    ProximityUUID = proximityUUID,
+                    RelevantText = relevantText,
+                    Major = major,
+                    Minor = minor
+                }
+            );
         }
 
-        public void AddLocalization(string languageCode, string key, string value)
+        public virtual void AddLocalization(string languageCode, string key, string value)
         {
             Dictionary<string, string> values;
 
@@ -354,7 +401,7 @@ namespace Passbook.Generator
             // NO OP.
         }
 
-        public void Write(JsonWriter writer)
+        public virtual void Write(JsonWriter writer)
         {
             PopulateFields();
 
@@ -647,7 +694,9 @@ namespace Passbook.Generator
         {
             if (!string.IsNullOrEmpty(color) && color.Substring(0, 1) == "#")
             {
-                int r, g, b;
+                int r,
+                    g,
+                    b;
 
                 if (color.Length == 3)
                 {
