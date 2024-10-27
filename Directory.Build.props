@@ -9,7 +9,16 @@
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>false</EmbedUntrackedSources>
   </PropertyGroup>
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);NU1507</NoWarn>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <PackageReference IncludeAssets="Build;Compile;Runtime" ExcludeAssets="Native;ContentFiles" />
+  </ItemDefinitionGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" Version="[8.0.0,)" />
   </ItemGroup>
+  <PropertyGroup>
+    <PackageCertificateKeyFile>./certs/cert.pfx</PackageCertificateKeyFile>
+  </PropertyGroup>
 </Project>

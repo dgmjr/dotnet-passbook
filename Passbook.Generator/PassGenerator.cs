@@ -1,18 +1,20 @@
-using Newtonsoft.Json;
-using Passbook.Generator.Exceptions;
-using Passbook.Generator.Extensions;
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security;
 using System.Security.Cryptography;
 using System.Security.Cryptography.Pkcs;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using System.Text.RegularExpressions;
+
+using Newtonsoft.Json;
+
+using Passbook.Generator.Exceptions;
+using Passbook.Generator.Extensions;
 
 namespace Passbook.Generator
 {
@@ -265,21 +267,17 @@ namespace Passbook.Generator
 
         private void CreatePassFile(PassGeneratorRequest request)
         {
-            using (MemoryStream ms = new MemoryStream())
+            using MemoryStream ms = new MemoryStream();
+            using StreamWriter sr = new StreamWriter(ms);
+            using (JsonWriter writer = new JsonTextWriter(sr))
             {
-                using (StreamWriter sr = new StreamWriter(ms))
-                {
-                    using (JsonWriter writer = new JsonTextWriter(sr))
-                    {
-                        writer.Formatting = Formatting.Indented;
+                writer.Formatting = Formatting.Indented;
 
-                        Trace.TraceInformation("Writing JSON...");
-                        request.Write(writer);
-                    }
-
-                    passFile = ms.ToArray();
-                }
+                Trace.TraceInformation("Writing JSON...");
+                request.Write(writer);
             }
+
+            passFile = ms.ToArray();
         }
 
         private void GenerateLocalizationFiles(PassGeneratorRequest request)
@@ -293,71 +291,60 @@ namespace Passbook.Generator
                 > localization in request.Localizations
             )
             {
-                using (MemoryStream ms = new MemoryStream())
+                using MemoryStream ms = new MemoryStream();
+                using StreamWriter sr = new StreamWriter(ms, Encoding.UTF8);
+                foreach (KeyValuePair<string, string> value in localization.Value)
                 {
-                    using (StreamWriter sr = new StreamWriter(ms, Encoding.UTF8))
-                    {
-                        foreach (KeyValuePair<string, string> value in localization.Value)
-                        {
-                            sr.WriteLine("\"{0}\" = \"{1}\";\n", value.Key, value.Value);
-                        }
-
-                        sr.Flush();
-                        localizationFiles.Add(localization.Key, ms.ToArray());
-                    }
+                    sr.WriteLine("\"{0}\" = \"{1}\";\n", value.Key, value.Value);
                 }
+
+                sr.Flush();
+                localizationFiles.Add(localization.Key, ms.ToArray());
             }
         }
 
         private void GenerateManifestFile(PassGeneratorRequest request)
         {
-            using (MemoryStream ms = new MemoryStream())
+            using MemoryStream ms = new MemoryStream();
+            using (JsonWriter jsonWriter = new JsonTextWriter(new StreamWriter(ms)))
             {
-                using (StreamWriter sw = new StreamWriter(ms))
+                jsonWriter.Formatting = Formatting.Indented;
+                jsonWriter.WriteStartObject();
+
+                var hash = passFile!.GetSha256HashString();
+                jsonWriter.WritePropertyName(@"pass.json");
+                jsonWriter.WriteValue(hash);
+
+                foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
                 {
-                    using (JsonWriter jsonWriter = new JsonTextWriter(sw))
+                    try
                     {
-                        jsonWriter.Formatting = Formatting.Indented;
-                        jsonWriter.WriteStartObject();
-
-                        string? hash = default;
-
-                        hash = passFile!.GetSha256HashString();
-                        jsonWriter.WritePropertyName(@"pass.json");
+                        hash = image.Value.GetSha256HashString();
+                        jsonWriter.WritePropertyName(image.Key.ToFilename());
                         jsonWriter.WriteValue(hash);
-
-                        foreach (KeyValuePair<PassbookImage, byte[]> image in request.Images)
-                        {
-                            try
-                            {
-                                hash = image.Value.GetSha256HashString();
-                                jsonWriter.WritePropertyName(image.Key.ToFilename());
-                                jsonWriter.WriteValue(hash);
-                            }
-                            catch (Exception exception)
-                            {
-                                throw new ManifestImageWriteException(
-                                    $"Unexpected error writing image on manifest file. Image Key: \"{image.Key}\"",
-                                    exception
-                                );
-                            }
-                        }
-
-                        foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
-                        {
-                            hash = localization.Value.GetSha256HashString();
-                            jsonWriter.WritePropertyName(
-                                string.Format("{0}.lproj/pass.strings", localization.Key.ToLower())
-                            );
-                            jsonWriter.WriteValue(hash);
-                        }
                     }
-
-                    manifestFile = ms.ToArray();
+                    catch (Exception exception)
+                    {
+                        throw new ManifestImageWriteException(
+                            $"Unexpected error writing image on manifest file. Image Key: \"{image.Key}\"",
+                            exception
+                        );
+                    }
                 }
 
-                SignManifestFile(request);
+                foreach (KeyValuePair<string, byte[]> localization in localizationFiles)
+                {
+                    hash = localization.Value.GetSha256HashString();
+                    jsonWriter.WritePropertyName(
+                        string.Format("{0}.lproj/pass.strings", localization.Key.ToLower())
+                    );
+                    jsonWriter.WriteValue(hash);
+                }
             }
+
+            manifestFile = ms.ToArray();
+
+            SignManifestFile(request);
         }
 
         private void SignManifestFile(PassGeneratorRequest request)
@@ -368,9 +355,9 @@ namespace Passbook.Generator
             {
                 ContentInfo contentInfo = new ContentInfo(manifestFile!);
 
-                SignedCms signing = new SignedCms(contentInfo, true);
+                var signing = new SignedCms(contentInfo, true);
 
-                CmsSigner signer = new CmsSigner(
+                var signer = new CmsSigner(
                     SubjectIdentifierType.SubjectKeyIdentifier,
                     request.PassbookCertificate
                 )
@@ -397,6 +384,16 @@ namespace Passbook.Generator
                 Trace.TraceError("Failed to sign the manifest file: [{0}]", exp.Message);
                 throw new ManifestSigningException("Failed to sign manifest", exp);
             }
+        }
+
+        public virtual string ToJson()
+        {
+            return JSer.Serialize(this);
+        }
+
+        public static PassGeneratorRequest FromJson(string json)
+        {
+            return JSer.Deserialize<PassGeneratorRequest>(json)!;
         }
     }
 }

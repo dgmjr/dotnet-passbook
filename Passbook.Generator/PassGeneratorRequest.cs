@@ -1,12 +1,19 @@
-using Newtonsoft.Json;
-using Passbook.Generator.Exceptions;
-using Passbook.Generator.Fields;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
+using System.Text;
+
+using Newtonsoft.Json;
+
+using Passbook.Generator.Exceptions;
+using Passbook.Generator.Fields;
+
+using JsonIgnoreAttribute = System.Text.Json.Serialization.JsonIgnoreAttribute;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace Passbook.Generator
 {
@@ -203,11 +210,13 @@ namespace Passbook.Generator
         /// <summary>
         /// A byte array containing the PassKit certificate
         /// </summary>
+        [JsonIgnore]
         public virtual X509Certificate2 PassbookCertificate { get; set; }
 
         /// <summary>
         /// A byte array containing the Apple WWDRCA X509 certificate
         /// </summary>
+        [JsonIgnore]
         public virtual X509Certificate2 AppleWWDRCACertificate { get; set; }
 
         #endregion
@@ -724,5 +733,15 @@ namespace Passbook.Generator
         }
 
         #endregion
+
+        public virtual string ToJson()
+        {
+            return JSer.Serialize(this);
+        }
+
+        public static PassGeneratorRequest FromJson(string json)
+        {
+            return JSer.Deserialize<PassGeneratorRequest>(json)!;
+        }
     }
 }

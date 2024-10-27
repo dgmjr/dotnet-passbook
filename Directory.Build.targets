@@ -2,9 +2,13 @@
  * Directory.Build copy.props
  *     Created: 2024-10-17T11:12:19-04:00
  *    Modified: 2024-10-17T11:12:19-04:00
- *      Author: David G. Moore, Jr. <david@dgmjr.io>
- *   Copyright: © 2022 - 2024 David G. Moore, Jr., All Rights Reserved
+ *      Author: Dr. David Gerard <david@mymoc.social>
+ *   Copyright: © 2022 - 2024 Dr. David Gerard, All Rights Reserved
  *     License: MIT (https://opensource.org/licenses/MIT)
 -->
 
-<Project />
+<Project>
+  <Target Name="SignPackage" AfterTargets="Pack" DependsOnTargets="Pack">
+    <!-- <Exec Command="nuget sign %22$(PackageOutputPath)$(PackageId)-$(PackageVersion).nupkg%22 -Timestamper %22http://timestamp.verisign.com/scripts/timstamp.dll%22 -CertificatePath %22./certs/cert.pfx%22 -CertificatePassword %22DGmjrphd201070\!\!%22" /> -->
+  </Target>
+</Project>

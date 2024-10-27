@@ -9,7 +9,7 @@
     <Description>Generate pass files for Apple Wallet. This library allows you to build and sign a pkpass file.</Description>
     <PackageReleaseNotes>Fix issue where some Associated Store Identifier values where not being handled correctly (GitHub issue #179)</PackageReleaseNotes>
     <PackageTags>PassBook Wallet Apple Passkit</PackageTags>
-    <Copyright>© 2022-2024 Tomas McGuinness &amp; David G. Moore, Jr. &lt;david@dgmjr.io&gt;</Copyright>
+    <Copyright>© 2022-2024 Tomas McGuinness &amp; Dr. David G. Moore Jr. &lt;david@dgmjr.io&gt;</Copyright>
     <PackageLicense>MIT</PackageLicense>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Authors>Tomas McGuinness; David G. Moore Jr. &lt;david@dgmjr.io&gt;</Authors>
@@ -25,16 +25,18 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="MinVer">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
-    <PackageReference Include="Newtonsoft.Json" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.Security.Cryptography.Pkcs" />
+		<PackageReference Include="Microsoft.AspNetCore.Authentication" Version="[2.2.0,)" />
+		<PackageReference Include="Microsoft.CSharp" Version="[4.7.0,)" />
+		<PackageReference Include="TimeZoneConverter"  Version="[5.0.0,)" />
+    <PackageReference Include="Dgmjr.Mime" Version="[0.0.1-Local,)" />
+    <PackageReference Include="MinVer" IncludeAssets="runtime; build; native; contentfiles; analyzers; buildtransitive" PrivateAssets="all" Version="[6.0.0,)"  />
+    <PackageReference Include="Newtonsoft.Json" Version="[13.0.3,)" />
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="[8.0.1,)" />
   </ItemGroup>
   <ItemGroup>
     <None Include="../images/icon2.png" Pack="true" PackagePath="icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Using Include="System.Security.Cryptography.Pkcs" />
   </ItemGroup>
 </Project>

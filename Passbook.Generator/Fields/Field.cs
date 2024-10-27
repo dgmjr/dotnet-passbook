@@ -67,7 +67,7 @@ namespace Passbook.Generator.Fields
         /// <para>This key's value overrides the text specified by the value key.</para>
         /// <para>Available in iOS 7.0.</para>
         /// </summary>
-        public string AttributedValue { get; set; }
+        public string? AttributedValue { get; set; }
 
         /// <summary>
         /// Optional. Data detectors that are applied to the field’s value. Valid values are:
